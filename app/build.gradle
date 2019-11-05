@@ -48,5 +48,6 @@ dependencies {
 
     implementation project(':sharedpref')
 
+//    implementation 'com.github.changshuai7:CSSharedPref:0.0.1'
 
 }
