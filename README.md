@@ -85,8 +85,8 @@ SharedPref.getString("test"));
 ```
 SharedPref.removeKey("test"));
 ```
-判断是否存在：
+判断是否存在（返回boolean）：
 ```
-boolean SharedPref.contains("test"));
+SharedPref.contains("test"));
 ```
 
