@@ -70,8 +70,7 @@ protected void attachBaseContext(Context base) {
 
 ## 三、使用
 
-SharedPref 底层实现是维护了一张 sp_default 的数据表，包含 id, key, values 三个字段。
-使用的方式如下：
+
 存数据：
 ```
 SharedPref.setString("test", "存入数据库");
