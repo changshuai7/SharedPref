@@ -1,4 +1,4 @@
-# CSSharedPref:网络请求库
+# CSSharedPref:高效SP库
 ## 写在前边
 
 由于 SharedPreference 的性能原因，此库封装了一个使用方法与SharedPreference相同的类 SharedPref
