@@ -40,7 +40,8 @@ dependencies {
 
 ```
 <provider
-    android:name="com.shuai.sharedpref.SharedPreferenceProvider"                   android:authorities="包名.provider.sharedprefer"  //授权URI
+    android:name="com.shuai.sharedpref.SharedPreferenceProvider"
+    android:authorities="包名.provider.sharedprefer"  //授权URI
     android:exported="true"                    //设置初始化顺序
     android:initOrder="1" />
 ```
@@ -67,7 +68,7 @@ protected void attachBaseContext(Context base) {
 }
 ```
 
-### 3.使用
+## 三、使用
 
 SharedPref 底层实现是维护了一张 sp_default 的数据表，包含 id, key, values 三个字段。
 使用的方式如下：
