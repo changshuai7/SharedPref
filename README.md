@@ -81,4 +81,12 @@ SharedPref.setString("test", "存入数据库");
 SharedPref.getString("test"));
 ```
 
+删数据：
+```
+SharedPref.removeKey("test"));
+```
+判断是否存在：
+```
+SharedPref.contains("test"));
+```
 
