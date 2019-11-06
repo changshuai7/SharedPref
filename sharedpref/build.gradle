@@ -1,5 +1,13 @@
 apply plugin: 'com.android.library'
-
+apply plugin: 'com.novoda.bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.novoda:bintray-release:0.9.1'
+    }
+}
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -23,4 +31,13 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
+}
+
+publish {
+    userOrg = 'shuai'
+    groupId = 'com.shuai'
+    artifactId = 'sharedpref'
+    publishVersion = '0.0.2'
+    desc = 'a tools for android developer to save data'
+    website = 'https://github.com/changshuai7/SharedPref'
 }
