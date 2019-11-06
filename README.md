@@ -42,10 +42,10 @@ dependencies {
 @Override
 public void onCreate() {
     super.onCreate();
+    //初始化
     SharedPref.init(this);
 
 }
-
 
 ```
 
