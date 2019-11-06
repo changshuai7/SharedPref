@@ -2,14 +2,15 @@ package com.shuai.sharedpref;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
 
+import com.shuai.sharedpref.utils.Util;
 
 
 public class SharedPreferenceProvider extends ContentProvider {
-    public static final String AUTHORITY = SharedPrefConfig.getConfig().getSharedPreferenceAuthority();
 
     private static final int SP_VALUE = 1;
     private static final int SP_STAT = 2;
@@ -17,15 +18,19 @@ public class SharedPreferenceProvider extends ContentProvider {
 
     private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
-    private static void initURIMatcher(){
-        sURIMatcher.addURI(AUTHORITY, "value", SP_VALUE);
-        sURIMatcher.addURI(AUTHORITY, "stat", SP_STAT);
-        sURIMatcher.addURI(AUTHORITY, "account", SP_ACCOUNT);
+    private static void initURIMatcher(Context context){
+        sURIMatcher.addURI(getAuthority(context), "value", SP_VALUE);
+        sURIMatcher.addURI(getAuthority(context), "stat", SP_STAT);
+        sURIMatcher.addURI(getAuthority(context), "account", SP_ACCOUNT);
+    }
+
+    public static String getAuthority(Context context){
+        return Util.getProviderAuthority(context,SharedPreferenceProvider.class.getName());
     }
 
     @Override
     public boolean onCreate() {
-        initURIMatcher();
+        initURIMatcher(getContext());
         return true;
     }
 

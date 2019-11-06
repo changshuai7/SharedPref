@@ -28,7 +28,7 @@ allprojects {
 步骤2. 在项目app的 build.gradle 的 dependencies 中添加：
 
 dependencies {
-        implementation 'com.github.changshuai7:CSSharedPref:0.0.1'
+        implementation 'com.github.changshuai7:CSSharedPref:0.0.2'
 }
 
 版本号 一般采用Tag中最新的版本。
@@ -36,36 +36,17 @@ dependencies {
 
 
 ### 2.初始化。
-#### 2.1在清单文件中初始化
-
-```
-<provider
-    android:name="com.shuai.sharedpref.SharedPreferenceProvider"
-    android:authorities="包名.provider.sharedprefer"  //授权URI
-    android:exported="true"                    //设置初始化顺序
-    android:initOrder="1" />
-```
-#### 2.1在Application中初始化
+在Application中初始化
 
 ```
 @Override
 public void onCreate() {
     super.onCreate();
-    //由于 ContentResolver 的使用需要依赖 Context，所以 Application 创建时需要传入应用Context
-    //【注意，必须在此位置初始化】
-    SharedPrefConfig.initContext(this);
+    SharedPref.init(this);
 
 }
 
-@Override
-protected void attachBaseContext(Context base) {
-    super.attachBaseContext(base);
-    //【注意，必须在此位置初始化】
-    SharedPrefConfig.getConfig()
-            .setDebug(BuildConfig.DEBUG)
-            .setSharedPreferenceAuthority("包名.provider.sharedprefer");
 
-}
 ```
 
 ## 三、使用

@@ -1,2 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.shuai.sharedpref" />
+    package="com.shuai.sharedpref" >
+
+
+    <application>
+
+        <provider
+            android:name="com.shuai.sharedpref.SharedPreferenceProvider"
+            android:authorities="${applicationId}.provider.sharedprefer"
+            android:exported="true"
+            android:initOrder="1" />
+
+    </application>
+
+</manifest>

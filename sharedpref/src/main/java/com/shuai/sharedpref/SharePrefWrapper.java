@@ -11,7 +11,7 @@ import com.shuai.sharedpref.utils.Util;
 
 
 public class SharePrefWrapper {
-    private static final boolean DEBUG = SharedPrefConfig.getConfig().isDebug();
+    private static final boolean DEBUG = BuildConfig.DEBUG;
     private static final String TAG = DEBUG ? "SharePrefWrapper" : "spw";
 
     public static final String SP_NAME_DEFAULT = "sp_default";
@@ -19,26 +19,30 @@ public class SharePrefWrapper {
     public static final String SP_NAME_ACCOUNT = "sp_account";
     public static final String SP_NAME_UPDATESTATE = "sp_updatestate";
 
+    private static Context mContext;
+    private static String mAuthority;
 
-    private static final Uri URI_DEFAULT = Uri.parse("content://" + SharedPreferenceProvider.AUTHORITY + "/value");
-    private static final Uri URI_STAT = Uri.parse("content://" + SharedPreferenceProvider.AUTHORITY + "/stat");
-    private static final Uri URI_ACCOUNT = Uri.parse("content://" + SharedPreferenceProvider.AUTHORITY + "/account");
-    
-    private static Context mContext = null;
+    private static Uri mUrlDefault;
+    private static Uri mUrlStat;
+    private static Uri mUrlAccount;
 
     public static void initContext (Context context) {
         mContext = context;
+        mAuthority = Util.getProviderAuthority(context,SharedPreferenceProvider.class.getName());
+        mUrlDefault = Uri.parse("content://" + mAuthority + "/value");
+        mUrlStat = Uri.parse("content://" + mAuthority + "/stat");
+        mUrlAccount = Uri.parse("content://" + mAuthority + "/account");
     }
 
     public static Uri getDBSharedPrefUri(final String prefName) {
         if (null == prefName) {
-            return URI_DEFAULT;
+            return mUrlDefault;
         } else if (SP_NAME_STAT.equals(prefName)) {
-            return URI_STAT;
+            return mUrlStat;
         } else if (SP_NAME_ACCOUNT.equals(prefName)) {
-            return URI_ACCOUNT;
+            return mUrlAccount;
         } else {
-            return URI_DEFAULT;
+            return mUrlDefault;
         }
     }
 

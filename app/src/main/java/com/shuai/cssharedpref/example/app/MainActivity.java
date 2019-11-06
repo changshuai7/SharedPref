@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.shuai.sharedpref.SharedPref;
-import com.shuai.sharedpref.SharedPrefConfig;
 
 public class MainActivity extends AppCompatActivity {
 

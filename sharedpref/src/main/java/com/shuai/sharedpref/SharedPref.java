@@ -1,8 +1,17 @@
 package com.shuai.sharedpref;
 
 
+import android.content.Context;
+
 public class SharedPref {
 
+    /**
+     * 请在Application中完成初始化操作
+     * @param context
+     */
+    public static void init(Context context){
+        SharePrefWrapper.initContext(context);
+    }
 
     public static void removeKey(String key) {
         SharePrefWrapper.removeKey(SharePrefWrapper.SP_NAME_DEFAULT, key);

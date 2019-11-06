@@ -12,7 +12,7 @@ import android.util.Log;
 
 public class SpDbHelper extends SQLiteOpenHelper {
     private static final String TAG = "SpDbOpenHelper";
-    private static final boolean DEBUG = SharedPrefConfig.getConfig().isDebug();
+    private static final boolean DEBUG = BuildConfig.DEBUG;
 
     private static final String DB_NAME = "sp.db";
     private static final int DB_VER = 3;
