@@ -44,9 +44,7 @@ public void onCreate() {
     super.onCreate();
     //初始化
     SharedPref.init(this);
-
 }
-
 ```
 
 ## 三、使用
