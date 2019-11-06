@@ -11,17 +11,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-
-        <!--<provider-->
-            <!--android:name="com.shuai.sharedpref.SharedPreferenceProvider"-->
-            <!--android:authorities="com.shuai.cssharedpref.example.app.provider.sharedprefer"-->
-            <!--android:exported="true"-->
-            <!--android:initOrder="1" />-->
-
         <activity android:name=".MainActivity">
             <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

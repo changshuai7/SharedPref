@@ -12,13 +12,25 @@
         android:id="@+id/btn_save_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="存储数据" />
+        android:text="存储SP数据" />
 
     <Button
         android:id="@+id/btn_get_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="获取数据" />
+        android:text="获取SP数据" />
+
+    <Button
+        android:id="@+id/btn_remove_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="删除SP数据" />
+
+    <Button
+        android:id="@+id/btn_judge_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="检查SP数据是否存在" />
 
 
 
