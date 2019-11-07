@@ -1,4 +1,4 @@
-# CSSharedPref:高效SP存储库
+# SharedPref:高效SP存储库
 ## 写在前边
 
 由于 SharedPreference 的性能原因，此库封装了一个使用方法与SharedPreference相同的类 SharedPref
