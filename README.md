@@ -16,19 +16,8 @@ SharedPref 的底层是使用了ContentProvider，维护了一张 sp_default 的
 ### 1.引入。
 
 ```
-步骤1：在项目根目录的 build.gradle 中添加：
-
-allprojects {
-	repositories {
-		...
-		maven { url 'https://www.jitpack.io' }
-	}
-}
-
-步骤2. 在项目app的 build.gradle 的 dependencies 中添加：
-
 dependencies {
-        implementation 'com.github.changshuai7:CSSharedPref:0.0.2'
+        implementation 'com.shuai:sharedpref:0.0.2'
 }
 
 版本号 一般采用Tag中最新的版本。
