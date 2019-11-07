@@ -15,8 +15,7 @@ android {
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode rootProject.ext.libVersionCode
-        versionName rootProject.ext.libVersionName
+
     }
 
     buildTypes {
@@ -34,10 +33,10 @@ dependencies {
 }
 
 publish {
-    userOrg = 'shuai'
-    groupId = 'com.shuai'
-    artifactId = 'sharedpref'
-    publishVersion = '0.0.2'
-    desc = 'a tools for android developer to save data'
-    website = 'https://github.com/changshuai7/SharedPref'
+    userOrg = rootProject.ext.userOrg
+    groupId = rootProject.ext.groupId
+    artifactId = rootProject.ext.artifactId
+    publishVersion = rootProject.ext.publishVersion
+    desc = rootProject.ext.desc
+    website = rootProject.ext.website
 }

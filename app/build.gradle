@@ -48,6 +48,6 @@ dependencies {
 
     implementation project(':sharedpref')
 
-//    implementation 'com.shuai:sharedpref:0.0.2'
+//    implementation 'com.shuai:sharedpref:0.0.3'
 
 }

@@ -17,7 +17,7 @@ SharedPref 的底层是使用了ContentProvider，维护了一张 sp_default 的
 
 ```
 dependencies {
-        implementation 'com.shuai:sharedpref:0.0.2'
+        implementation 'com.shuai:sharedpref:0.0.3'
 }
 
 版本号 一般采用Tag中最新的版本。
