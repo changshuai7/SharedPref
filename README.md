@@ -45,15 +45,15 @@ SharedPref.setString("test", "存入数据库");
 ```
 取数据：
 ```
-SharedPref.getString("test"));
+SharedPref.getString("test");
 ```
 
 删数据：
 ```
-SharedPref.removeKey("test"));
+SharedPref.removeKey("test");
 ```
 判断是否存在（返回boolean）：
 ```
-SharedPref.contains("test"));
+SharedPref.contains("test");
 ```
 
