@@ -19,20 +19,10 @@ public class SpDbHelper extends SQLiteOpenHelper {
 
     /** ver 1 */
     private static final String DB_TABLE_SP = "t_sp";
-    private static final String DB_TABLE_STAT = "t_stat";
-    /** ver 2 */
-    private static final String DB_TABLE_ACCOUNT = "t_account_data";
+    private static final String DB_TABLE_OTHER = "t_other";
 
     public static final String COL_KEY = "key";
     public static final String COL_VALUE = "value";
-
-    public static final int TYPE_STRING = 1;
-    public static final int TYPE_INT = 2;
-    public static final int TYPE_LONG = 3;
-    public static final int TYPE_BOOLEAN = 4;
-    public static final int TYPE_FLOAT = 5;
-
-    public static final String[] PROJECTIONS = new String[] {COL_KEY, COL_VALUE};
 
     private static SpDbHelper mInstance;
     private SQLiteDatabase mDb;
@@ -66,9 +56,7 @@ public class SpDbHelper extends SQLiteOpenHelper {
 
         db.execSQL("CREATE TABLE IF NOT EXISTS " + DB_TABLE_SP + " (" + COL_KEY + " TEXT NOT NULL, " + COL_VALUE
                 + " TEXT);");
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + DB_TABLE_STAT + " (" + COL_KEY + " TEXT NOT NULL, " + COL_VALUE
-                + " TEXT);");
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + DB_TABLE_ACCOUNT + " (" + COL_KEY + " TEXT NOT NULL, " + COL_VALUE
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + DB_TABLE_OTHER + " (" + COL_KEY + " TEXT NOT NULL, " + COL_VALUE
                 + " TEXT);");
 
         if (DEBUG)
@@ -150,67 +138,39 @@ public class SpDbHelper extends SQLiteOpenHelper {
      *
      * @return 有效的cursor或者null
      */
-    Cursor queryStat(String[] projection, String selection, String[] selectionArgs) {
+    Cursor queryOther(String[] projection, String selection, String[] selectionArgs) {
         if (!checkAndOpenDb()) {
             return null;
         }
 
-        return mDb.query(DB_TABLE_STAT, projection, selection, selectionArgs, null, null, null);
+        return mDb.query(DB_TABLE_OTHER, projection, selection, selectionArgs, null, null, null);
     }
 
-    Cursor queryAccount(String[] projection, String selection, String[] selectionArgs) {
-        if (!checkAndOpenDb()) {
-            return null;
-        }
 
-        return mDb.query(DB_TABLE_ACCOUNT, projection, selection, selectionArgs, null, null, null);
-    }
-
-    void insertStat(ContentValues values) {
+    void insertOther(ContentValues values) {
         if (!checkAndOpenDb()) {
             return;
         }
 
-        mDb.insert(DB_TABLE_STAT, null, values);
+        mDb.insert(DB_TABLE_OTHER, null, values);
     }
 
-    void insertAccount(ContentValues values) {
-        if (!checkAndOpenDb()) {
-            return;
-        }
 
-        mDb.insert(DB_TABLE_ACCOUNT, null, values);
-    }
-
-    int updateStat(ContentValues values, String selection, String[] selectionArgs) {
+    int updateOther(ContentValues values, String selection, String[] selectionArgs) {
         if (!checkAndOpenDb()) {
             return 0;
         }
 
-        return mDb.update(DB_TABLE_STAT, values, selection, selectionArgs);
+        return mDb.update(DB_TABLE_OTHER, values, selection, selectionArgs);
     }
 
-    int updateAccount(ContentValues values, String selection, String[] selectionArgs) {
+
+    int deleteOther(String selection, String[] selectionArgs) {
         if (!checkAndOpenDb()) {
             return 0;
         }
 
-        return mDb.update(DB_TABLE_ACCOUNT, values, selection, selectionArgs);
+        return mDb.delete(DB_TABLE_OTHER, selection, selectionArgs);
     }
 
-    int deleteStat(String selection, String[] selectionArgs) {
-        if (!checkAndOpenDb()) {
-            return 0;
-        }
-
-        return mDb.delete(DB_TABLE_STAT, selection, selectionArgs);
-    }
-
-    int deleteAccount(String selection, String[] selectionArgs) {
-        if (!checkAndOpenDb()) {
-            return 0;
-        }
-
-        return mDb.delete(DB_TABLE_ACCOUNT, selection, selectionArgs);
-    }
 }
