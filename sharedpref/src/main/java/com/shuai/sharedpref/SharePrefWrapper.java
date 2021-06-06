@@ -26,10 +26,6 @@ public class SharePrefWrapper {
         mAuthority = Util.getProviderAuthority(context, SharedPreferenceProvider.class.getName());
     }
 
-    public static Uri getDBSharedPrefUri(final String prefName) {
-        return getDBSharedPrefUri(mContext.getPackageName(), prefName);
-    }
-
     final static String AuthoritySuffix = ".provider.sharedprefer";
 
     /**
@@ -92,7 +88,7 @@ public class SharePrefWrapper {
 
             if (count == 0) {
                 values.put(SpDbHelper.COL_KEY, key);
-                contentResolver.insert(SharePrefWrapper.getDBSharedPrefUri(prefName), values);
+                contentResolver.insert(SharePrefWrapper.getDBSharedPrefUri(pkgName,prefName), values);
             }
         } catch (Exception e) {
             if (DEBUG) {
@@ -134,7 +130,7 @@ public class SharePrefWrapper {
 
             if (count == 0) {
                 values.put(SpDbHelper.COL_KEY, key);
-                contentResolver.insert(SharePrefWrapper.getDBSharedPrefUri(prefName), values);
+                contentResolver.insert(SharePrefWrapper.getDBSharedPrefUri(pkgName,prefName), values);
             }
         } catch (Exception e) {
             if (DEBUG) {
@@ -185,7 +181,7 @@ public class SharePrefWrapper {
 
             if (count == 0) {
                 values.put(SpDbHelper.COL_KEY, key);
-                contentResolver.insert(SharePrefWrapper.getDBSharedPrefUri(prefName), values);
+                contentResolver.insert(SharePrefWrapper.getDBSharedPrefUri(pkgName,prefName), values);
             }
         } catch (Exception e) {
             if (DEBUG) {
@@ -236,7 +232,7 @@ public class SharePrefWrapper {
                     SpDbHelper.COL_KEY + "=?", new String[]{key});
             if (count == 0) {
                 values.put(SpDbHelper.COL_KEY, key);
-                contentResolver.insert(SharePrefWrapper.getDBSharedPrefUri(prefName), values);
+                contentResolver.insert(SharePrefWrapper.getDBSharedPrefUri(pkgName,prefName), values);
             }
         } catch (Exception e) {
             if (DEBUG) {
@@ -297,7 +293,7 @@ public class SharePrefWrapper {
                     SpDbHelper.COL_KEY + "=?", new String[]{key});
             if (count == 0) {
                 values.put(SpDbHelper.COL_KEY, key);
-                contentResolver.insert(SharePrefWrapper.getDBSharedPrefUri(prefName), values);
+                contentResolver.insert(SharePrefWrapper.getDBSharedPrefUri(pkgName,prefName), values);
             }
         } catch (Exception e) {
             if (DEBUG) {
