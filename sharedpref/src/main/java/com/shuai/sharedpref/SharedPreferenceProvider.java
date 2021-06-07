@@ -12,14 +12,17 @@ import com.shuai.sharedpref.utils.Util;
 
 public class SharedPreferenceProvider extends ContentProvider {
 
-    private static final int SP_DEFAULT = 1;
-    private static final int SP_OTHER = 2;
+    private static final int URI_MATCH_CODE_SP_DEFAULT = 1;
+    private static final int URI_MATCH_CODE_SP_OTHER = 2;
+    public static final String URI_PATH_SP_DEFAULT = "default";
+    public static final String URI_PATH_SP_OTHER = "other";
+
 
     private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     private static void initURIMatcher(Context context){
-        sURIMatcher.addURI(getAuthority(context), "default", SP_DEFAULT);
-        sURIMatcher.addURI(getAuthority(context), "other", SP_OTHER);
+        sURIMatcher.addURI(getAuthority(context), URI_PATH_SP_DEFAULT, URI_MATCH_CODE_SP_DEFAULT);
+        sURIMatcher.addURI(getAuthority(context), URI_PATH_SP_OTHER, URI_MATCH_CODE_SP_OTHER);
     }
 
     public static String getAuthority(Context context){
@@ -44,13 +47,13 @@ public class SharedPreferenceProvider extends ContentProvider {
         SpDbHelper dbHelper = SpDbHelper.getInstance(getContext());
 
         switch (code) {
-        case SP_DEFAULT: {
+        case URI_MATCH_CODE_SP_DEFAULT: {
             int ret = dbHelper.delete(selection, selectionArgs);
             getContext().getContentResolver().notifyChange(uri, null);
             return ret;
         }
 
-        case SP_OTHER: {
+        case URI_MATCH_CODE_SP_OTHER: {
             return dbHelper.deleteOther(selection, selectionArgs);
         }
 
@@ -67,11 +70,11 @@ public class SharedPreferenceProvider extends ContentProvider {
         SpDbHelper dbHelper = SpDbHelper.getInstance(getContext());
 
         switch (code) {
-        case SP_DEFAULT: {
+        case URI_MATCH_CODE_SP_DEFAULT: {
             return dbHelper.query(projection, selection, selectionArgs);
         }
 
-        case SP_OTHER: {
+        case URI_MATCH_CODE_SP_OTHER: {
             return dbHelper.queryOther(projection, selection, selectionArgs);
         }
 
@@ -87,13 +90,13 @@ public class SharedPreferenceProvider extends ContentProvider {
         SpDbHelper dbHelper = SpDbHelper.getInstance(getContext());
 
         switch (code) {
-        case SP_DEFAULT: {
+        case URI_MATCH_CODE_SP_DEFAULT: {
             dbHelper.insert(values);
             getContext().getContentResolver().notifyChange(uri, null);
             return uri;
         }
 
-        case SP_OTHER: {
+        case URI_MATCH_CODE_SP_OTHER: {
             dbHelper.insertOther(values);
             return uri;
         }
@@ -111,7 +114,7 @@ public class SharedPreferenceProvider extends ContentProvider {
         SpDbHelper dbHelper = SpDbHelper.getInstance(getContext());
 
         switch (code) {
-        case SP_DEFAULT: {
+        case URI_MATCH_CODE_SP_DEFAULT: {
             count = dbHelper.update(values, selection, selectionArgs);
             if (count > 0) {
                 getContext().getContentResolver().notifyChange(uri, null);
@@ -119,7 +122,7 @@ public class SharedPreferenceProvider extends ContentProvider {
         }
             break;
 
-        case SP_OTHER: {
+        case URI_MATCH_CODE_SP_OTHER: {
             count = dbHelper.updateOther(values, selection, selectionArgs);
         }
             break;
