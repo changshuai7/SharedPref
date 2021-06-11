@@ -6,23 +6,20 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
+import com.shuai.sharedpref.utils.Logger;
 
 
 public class SpDbHelper extends SQLiteOpenHelper {
     private static final String TAG = "SpDbOpenHelper";
-    private static final boolean DEBUG = BuildConfig.DEBUG;
+    private static final String DB_NAME = "shared_pref.db";
+    private static final int DB_VERSION = 1;
 
-    private static final String DB_NAME = "sp.db";
-    private static final int DB_VER = 3;
-
-    /** ver 1 */
-    private static final String DB_TABLE_SP = "t_sp";
+    private static final String DB_TABLE_SP = "t_default";
     private static final String DB_TABLE_OTHER = "t_other";
 
-    public static final String COL_KEY = "key";
-    public static final String COL_VALUE = "value";
+    public static final String COL_KEY = "K";
+    public static final String COL_VALUE = "V";
 
     private static SpDbHelper mInstance;
     private SQLiteDatabase mDb;
@@ -36,48 +33,41 @@ public class SpDbHelper extends SQLiteOpenHelper {
     }
 
     private SpDbHelper(Context context) {
-        super(context, DB_NAME, null, DB_VER);
+        super(context, DB_NAME, null, DB_VERSION);
 
-        if (DEBUG)
-            Log.d(TAG, "get instance");
+        Logger.d(TAG, "get instance");
 
         mContext = context;
 
         checkAndOpenDb();
 
-        if (DEBUG)
-            Log.d(TAG, "get instance done");
+        Logger.d(TAG, "get instance done");
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        if (DEBUG)
-            Log.d(TAG, "onCreate");
 
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + DB_TABLE_SP + " (" + COL_KEY + " TEXT NOT NULL, " + COL_VALUE
-                + " TEXT);");
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + DB_TABLE_OTHER + " (" + COL_KEY + " TEXT NOT NULL, " + COL_VALUE
-                + " TEXT);");
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + DB_TABLE_SP + " (" + COL_KEY + " TEXT NOT NULL, " + COL_VALUE + " TEXT);");
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + DB_TABLE_OTHER + " (" + COL_KEY + " TEXT NOT NULL, " + COL_VALUE + " TEXT);");
 
-        if (DEBUG)
-            Log.d(TAG, "onCreate done");
+        Logger.d(TAG, "onCreate done");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (DEBUG)
-            Log.d(TAG, "onUpgrade, old: " + oldVersion + " new: " + newVersion);
+
+        Logger.d(TAG, "onUpgrade, old: " + oldVersion + " new: " + newVersion);
     }
 
-    @SuppressLint({ "NewApi", "Override", "unused" })
+    @SuppressLint({"NewApi", "Override", "unused"})
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     }
 
     @Override
     public void onOpen(SQLiteDatabase db) {
-        if (DEBUG)
-            Log.d(TAG, "onOpen");
-    };
+
+        Logger.d(TAG, "onOpen");
+    }
 
     private boolean checkAndOpenDb() {
         if (mDb != null) {
@@ -88,8 +78,7 @@ public class SpDbHelper extends SQLiteOpenHelper {
             mDb = getWritableDatabase();
             return true;
         } catch (Exception e) {
-            if (DEBUG)
-                Log.e(TAG, "Err", e);
+            Logger.printStackTrace(e);
             mDb = null;
         }
 

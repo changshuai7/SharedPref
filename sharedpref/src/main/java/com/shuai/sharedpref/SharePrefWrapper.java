@@ -7,12 +7,11 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
 
+import com.shuai.sharedpref.utils.Logger;
 import com.shuai.sharedpref.utils.Util;
 
 
 public class SharePrefWrapper {
-    private static final boolean DEBUG = BuildConfig.DEBUG;
-    private static final String TAG = DEBUG ? "SharePrefWrapper" : "spw";
 
     //SP类型
     public enum SpName{
@@ -35,7 +34,7 @@ public class SharePrefWrapper {
         mAuthority = Util.getProviderAuthority(context, SharedPreferenceProvider.class.getName());
     }
 
-    final static String AuthoritySuffix = ".provider.sharedprefer";
+    final static String AuthoritySuffix = ".provider.sharedpref";
 
     /**
      * 获取URI
@@ -54,9 +53,8 @@ public class SharePrefWrapper {
             contentResolver.delete(SharePrefWrapper.getDBSharedPrefUri(pkgName, spName), SpDbHelper.COL_KEY + "=?",
                     new String[]{key});
         } catch (Exception e) {
-            if (DEBUG) {
-                Log.d(TAG, "err", e);
-            }
+            Logger.printStackTrace(e);
+
         }
     }
 
@@ -72,9 +70,7 @@ public class SharePrefWrapper {
                 ret = true;
             }
         } catch (Exception e) {
-            if (DEBUG) {
-                Log.e(TAG, "err", e);
-            }
+            Logger.printStackTrace(e);
         } finally {
             Util.closeCursor(cursor);
         }
@@ -94,9 +90,7 @@ public class SharePrefWrapper {
                 contentResolver.insert(SharePrefWrapper.getDBSharedPrefUri(pkgName,spName), values);
             }
         } catch (Exception e) {
-            if (DEBUG) {
-                Log.e(TAG, "err", e);
-            }
+            Logger.printStackTrace(e);
         }
     }
 
@@ -114,9 +108,7 @@ public class SharePrefWrapper {
                 }
             }
         } catch (Exception e) {
-            if (DEBUG) {
-                Log.e(TAG, "err", e);
-            }
+            Logger.printStackTrace(e);
         } finally {
             Util.closeCursor(cursor);
         }
@@ -136,9 +128,7 @@ public class SharePrefWrapper {
                 contentResolver.insert(SharePrefWrapper.getDBSharedPrefUri(pkgName,spName), values);
             }
         } catch (Exception e) {
-            if (DEBUG) {
-                Log.e(TAG, "err", e);
-            }
+            Logger.printStackTrace(e);
         }
     }
 
@@ -154,20 +144,14 @@ public class SharePrefWrapper {
                     try {
                         value = Integer.valueOf(cursor.getString(0)).intValue() == 1 ? true : false;
                     } catch (Exception e) {
-                        if (DEBUG) {
-                            Log.e(TAG, "Integer.valueOf [catch]", e);
-                        }
+                        Logger.printStackTrace(e);
                     }
                 }
             }
         } catch (Exception e) {
-            if (DEBUG) {
-                Log.e(TAG, "Exception [catch]", e);
-            }
+            Logger.printStackTrace(e);
         } catch (Error e) {
-            if (DEBUG) {
-                Log.e(TAG, "Error [catch]", e);
-            }
+            Logger.printStackTrace(e);
         } finally {
             Util.closeCursor(cursor);
         }
@@ -187,9 +171,7 @@ public class SharePrefWrapper {
                 contentResolver.insert(SharePrefWrapper.getDBSharedPrefUri(pkgName,spName), values);
             }
         } catch (Exception e) {
-            if (DEBUG) {
-                Log.e(TAG, "err", e);
-            }
+            Logger.printStackTrace(e);
         }
     }
 
@@ -205,20 +187,14 @@ public class SharePrefWrapper {
                     try {
                         value = Integer.valueOf(cursor.getString(0)).intValue();
                     } catch (Exception e) {
-                        if (DEBUG) {
-                            Log.e(TAG, "Integer.valueOf [catch]", e);
-                        }
+                        Logger.printStackTrace(e);
                     }
                 }
             }
         } catch (Exception e) {
-            if (DEBUG) {
-                Log.e(TAG, "err", e);
-            }
+            Logger.printStackTrace(e);
         } catch (Error e) {
-            if (DEBUG) {
-                Log.e(TAG, "Error [catch]", e);
-            }
+            Logger.printStackTrace(e);
         } finally {
             Util.closeCursor(cursor);
         }
@@ -238,9 +214,7 @@ public class SharePrefWrapper {
                 contentResolver.insert(SharePrefWrapper.getDBSharedPrefUri(pkgName,spName), values);
             }
         } catch (Exception e) {
-            if (DEBUG) {
-                Log.e(TAG, "err", e);
-            }
+            Logger.printStackTrace(e);
         }
     }
 
@@ -266,20 +240,14 @@ public class SharePrefWrapper {
                          * at java.lang.Long.valueOf(Long.java:477)
                          * at com.qihoo360.mobilesafe.share.SharedPref.long
                          */
-                        if (DEBUG) {
-                            Log.e(TAG, "Long.valueOf [catch]", e);
-                        }
+                        Logger.printStackTrace(e);
                     }
                 }
             }
         } catch (Exception e) {
-            if (DEBUG) {
-                Log.e(TAG, "err", e);
-            }
+            Logger.printStackTrace(e);
         } catch (Error e) {
-            if (DEBUG) {
-                Log.e(TAG, "Error [catch]", e);
-            }
+            Logger.printStackTrace(e);
         } finally {
             Util.closeCursor(cursor);
         }
@@ -299,9 +267,7 @@ public class SharePrefWrapper {
                 contentResolver.insert(SharePrefWrapper.getDBSharedPrefUri(pkgName,spName), values);
             }
         } catch (Exception e) {
-            if (DEBUG) {
-                Log.e(TAG, "err", e);
-            }
+            Logger.printStackTrace(e);
         }
     }
 
@@ -317,20 +283,14 @@ public class SharePrefWrapper {
                     try {
                         value = Float.valueOf(cursor.getString(0)).floatValue();
                     } catch (Exception e) {
-                        if (DEBUG) {
-                            Log.e(TAG, "Float.valueOf [catch]", e);
-                        }
+                        Logger.printStackTrace(e);
                     }
                 }
             }
         } catch (Exception e) {
-            if (DEBUG) {
-                Log.e(TAG, "err", e);
-            }
+            Logger.printStackTrace(e);
         } catch (Error e) {
-            if (DEBUG) {
-                Log.e(TAG, "Error [catch]", e);
-            }
+            Logger.printStackTrace(e);
         } finally {
             Util.closeCursor(cursor);
         }

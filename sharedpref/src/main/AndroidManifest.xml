@@ -8,7 +8,7 @@
         <!--authorities定义授权URI，initOrder定义初始化顺序-->
         <provider
             android:name="com.shuai.sharedpref.SharedPreferenceProvider"
-            android:authorities="${applicationId}.provider.sharedprefer"
+            android:authorities="${applicationId}.provider.sharedpref"
             android:exported="true"
             android:initOrder="1" />
 

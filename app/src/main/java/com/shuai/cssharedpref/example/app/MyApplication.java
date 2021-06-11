@@ -10,7 +10,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         //初始化
-        SharedPref.init(this);
+        SharedPref.init(this,BuildConfig.DEBUG,true);
     }
 
 }

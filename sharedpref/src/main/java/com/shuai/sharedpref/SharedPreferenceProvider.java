@@ -4,6 +4,7 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 
@@ -16,7 +17,6 @@ public class SharedPreferenceProvider extends ContentProvider {
     private static final int URI_MATCH_CODE_SP_OTHER = 2;
     public static final String URI_PATH_SP_DEFAULT = "default";
     public static final String URI_PATH_SP_OTHER = "other";
-
 
     private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -49,7 +49,7 @@ public class SharedPreferenceProvider extends ContentProvider {
         switch (code) {
         case URI_MATCH_CODE_SP_DEFAULT: {
             int ret = dbHelper.delete(selection, selectionArgs);
-            getContext().getContentResolver().notifyChange(uri, null);
+            notifyChange(uri,null);
             return ret;
         }
 
@@ -92,7 +92,7 @@ public class SharedPreferenceProvider extends ContentProvider {
         switch (code) {
         case URI_MATCH_CODE_SP_DEFAULT: {
             dbHelper.insert(values);
-            getContext().getContentResolver().notifyChange(uri, null);
+            notifyChange(uri,null);
             return uri;
         }
 
@@ -117,7 +117,7 @@ public class SharedPreferenceProvider extends ContentProvider {
         case URI_MATCH_CODE_SP_DEFAULT: {
             count = dbHelper.update(values, selection, selectionArgs);
             if (count > 0) {
-                getContext().getContentResolver().notifyChange(uri, null);
+                notifyChange(uri,null);
             }
         }
             break;
@@ -133,6 +133,13 @@ public class SharedPreferenceProvider extends ContentProvider {
         }
 
         return count;
+    }
+
+
+    private void notifyChange(Uri uri, ContentObserver observer) {
+        if (getContext() != null) {
+            getContext().getContentResolver().notifyChange(uri, observer);
+        }
     }
 
 }
