@@ -15,18 +15,16 @@ public class SharedPreferenceProvider extends ContentProvider {
 
     private static final int URI_MATCH_CODE_SP_DEFAULT = 1;
     private static final int URI_MATCH_CODE_SP_OTHER = 2;
-    public static final String URI_PATH_SP_DEFAULT = "default";
-    public static final String URI_PATH_SP_OTHER = "other";
 
     private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
-    private static void initURIMatcher(Context context){
-        sURIMatcher.addURI(getAuthority(context), URI_PATH_SP_DEFAULT, URI_MATCH_CODE_SP_DEFAULT);
-        sURIMatcher.addURI(getAuthority(context), URI_PATH_SP_OTHER, URI_MATCH_CODE_SP_OTHER);
+    private static void initURIMatcher(Context context) {
+        sURIMatcher.addURI(getAuthority(context), SharedPrefType.DEFAULT.uriPath, URI_MATCH_CODE_SP_DEFAULT);
+        sURIMatcher.addURI(getAuthority(context), SharedPrefType.OTHER.uriPath, URI_MATCH_CODE_SP_OTHER);
     }
 
-    public static String getAuthority(Context context){
-        return Util.getProviderAuthority(context,SharedPreferenceProvider.class.getName());
+    public static String getAuthority(Context context) {
+        return Util.getProviderAuthority(context, SharedPreferenceProvider.class.getName());
     }
 
     @Override
@@ -44,22 +42,23 @@ public class SharedPreferenceProvider extends ContentProvider {
     @Override
     public synchronized int delete(Uri uri, String selection, String[] selectionArgs) {
         final int code = sURIMatcher.match(uri);
-        SpDbHelper dbHelper = SpDbHelper.getInstance(getContext());
+        SharedPrefDbHelper dbHelper = SharedPrefDbHelper.getInstance(getContext());
 
         switch (code) {
-        case URI_MATCH_CODE_SP_DEFAULT: {
-            int ret = dbHelper.delete(selection, selectionArgs);
-            notifyChange(uri,null);
-            return ret;
-        }
+            case URI_MATCH_CODE_SP_DEFAULT: {
+                int ret = dbHelper.delete(SharedPrefType.DEFAULT, selection, selectionArgs);
+                notifyChange(uri, null);
+                return ret;
+            }
 
-        case URI_MATCH_CODE_SP_OTHER: {
-            return dbHelper.deleteOther(selection, selectionArgs);
-        }
+            case URI_MATCH_CODE_SP_OTHER: {
+                int ret = dbHelper.delete(SharedPrefType.OTHER, selection, selectionArgs);
+                notifyChange(uri, null);
+                return ret;
+            }
 
-
-        default:
-            return 0;
+            default:
+                return 0;
         }
 
     }
@@ -67,19 +66,19 @@ public class SharedPreferenceProvider extends ContentProvider {
     @Override
     public synchronized Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         final int code = sURIMatcher.match(uri);
-        SpDbHelper dbHelper = SpDbHelper.getInstance(getContext());
+        SharedPrefDbHelper dbHelper = SharedPrefDbHelper.getInstance(getContext());
 
         switch (code) {
-        case URI_MATCH_CODE_SP_DEFAULT: {
-            return dbHelper.query(projection, selection, selectionArgs);
-        }
+            case URI_MATCH_CODE_SP_DEFAULT: {
+                return dbHelper.query(SharedPrefType.DEFAULT, projection, selection, selectionArgs);
+            }
 
-        case URI_MATCH_CODE_SP_OTHER: {
-            return dbHelper.queryOther(projection, selection, selectionArgs);
-        }
+            case URI_MATCH_CODE_SP_OTHER: {
+                return dbHelper.query(SharedPrefType.OTHER, projection, selection, selectionArgs);
+            }
 
-        default:
-            return null;
+            default:
+                return null;
         }
 
     }
@@ -87,23 +86,23 @@ public class SharedPreferenceProvider extends ContentProvider {
     @Override
     public synchronized Uri insert(Uri uri, ContentValues values) {
         final int code = sURIMatcher.match(uri);
-        SpDbHelper dbHelper = SpDbHelper.getInstance(getContext());
+        SharedPrefDbHelper dbHelper = SharedPrefDbHelper.getInstance(getContext());
 
         switch (code) {
-        case URI_MATCH_CODE_SP_DEFAULT: {
-            dbHelper.insert(values);
-            notifyChange(uri,null);
-            return uri;
-        }
+            case URI_MATCH_CODE_SP_DEFAULT: {
+                dbHelper.insert(SharedPrefType.DEFAULT, values);
+                notifyChange(uri, null);
+                return uri;
+            }
 
-        case URI_MATCH_CODE_SP_OTHER: {
-            dbHelper.insertOther(values);
-            return uri;
-        }
+            case URI_MATCH_CODE_SP_OTHER: {
+                dbHelper.insert(SharedPrefType.OTHER, values);
+                notifyChange(uri, null);
+                return uri;
+            }
 
-
-        default:
-            return null;
+            default:
+                return null;
         }
     }
 
@@ -111,30 +110,32 @@ public class SharedPreferenceProvider extends ContentProvider {
     public synchronized int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         final int code = sURIMatcher.match(uri);
         int count = 0;
-        SpDbHelper dbHelper = SpDbHelper.getInstance(getContext());
+        SharedPrefDbHelper dbHelper = SharedPrefDbHelper.getInstance(getContext());
 
         switch (code) {
-        case URI_MATCH_CODE_SP_DEFAULT: {
-            count = dbHelper.update(values, selection, selectionArgs);
-            if (count > 0) {
-                notifyChange(uri,null);
+            case URI_MATCH_CODE_SP_DEFAULT: {
+                count = dbHelper.update(SharedPrefType.DEFAULT, values, selection, selectionArgs);
+                if (count > 0) {
+                    notifyChange(uri, null);
+                }
             }
-        }
             break;
 
-        case URI_MATCH_CODE_SP_OTHER: {
-            count = dbHelper.updateOther(values, selection, selectionArgs);
-        }
+            case URI_MATCH_CODE_SP_OTHER: {
+                count = dbHelper.update(SharedPrefType.OTHER, values, selection, selectionArgs);
+                if (count > 0) {
+                    notifyChange(uri, null);
+                }
+            }
             break;
 
-        default:
-            break;
+            default:
+                break;
 
         }
 
         return count;
     }
-
 
     private synchronized void notifyChange(Uri uri, ContentObserver observer) {
         if (getContext() != null) {

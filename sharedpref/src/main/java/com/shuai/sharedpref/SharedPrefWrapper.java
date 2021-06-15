@@ -5,26 +5,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.util.Log;
 
 import com.shuai.sharedpref.utils.Logger;
 import com.shuai.sharedpref.utils.Util;
 
 
-public class SharePrefWrapper {
-
-    //SP类型
-    public enum SpName{
-        DEFAULT(SharedPreferenceProvider.URI_PATH_SP_DEFAULT),
-        // 这里额外申明了另一张表，以备以后需要。
-        OTHER(SharedPreferenceProvider.URI_PATH_SP_OTHER);
-
-        private final String uriPath;
-
-        SpName(String uriPath) {
-            this.uriPath = uriPath;
-        }
-    }
+public class SharedPrefWrapper {
 
     private static Context mContext;
     private static String mAuthority;
@@ -39,32 +25,33 @@ public class SharePrefWrapper {
 
     /**
      * 获取URI
-     * @param pkgName   应用包名
-     * @param spName  表类型
+     *
+     * @param pkgName        应用包名
+     * @param sharedPrefType 表类型
      * @return
      */
-    public static Uri getDBSharedPrefUri(final String pkgName, final SpName spName) {
-        return Uri.parse("content://" + pkgName + AuthoritySuffix + "/" + (spName == null ? SpName.DEFAULT.uriPath : spName.uriPath));
+    public static Uri getDBSharedPrefUri(final String pkgName, final SharedPrefType sharedPrefType) {
+        return Uri.parse("content://" + pkgName + AuthoritySuffix + "/" + (sharedPrefType == null ? SharedPrefType.DEFAULT.uriPath : sharedPrefType.uriPath));
     }
 
 
-    public static void removeKey(final String pkgName, final SpName spName, String key) {
+    public static void removeKey(final String pkgName, final SharedPrefType sharedPrefType, String key) {
         ContentResolver contentResolver = mContext.getContentResolver();
         try {
-            contentResolver.delete(SharePrefWrapper.getDBSharedPrefUri(pkgName, spName), SpDbHelper.COL_KEY + "=?",
+            contentResolver.delete(SharedPrefWrapper.getDBSharedPrefUri(pkgName, sharedPrefType), SharedPrefDbHelper.COL_KEY + "=?",
                     new String[]{key});
         } catch (Exception e) {
             Logger.printStackTrace(e);
         }
     }
 
-    public static boolean contains(final String pkgName, final SpName spName, String key) {
+    public static boolean contains(final String pkgName, final SharedPrefType sharedPrefType, String key) {
         Cursor cursor = null;
         boolean ret = false;
         try {
             cursor = mContext.getContentResolver()
-                    .query(SharePrefWrapper.getDBSharedPrefUri(pkgName, spName), new String[]{SpDbHelper.COL_VALUE},
-                            SpDbHelper.COL_KEY + "=?", new String[]{key}, null);
+                    .query(SharedPrefWrapper.getDBSharedPrefUri(pkgName, sharedPrefType), new String[]{SharedPrefDbHelper.COL_VALUE},
+                            SharedPrefDbHelper.COL_KEY + "=?", new String[]{key}, null);
             if (cursor != null && cursor.getCount() > 0) {
                 ret = true;
             }
@@ -76,17 +63,17 @@ public class SharePrefWrapper {
         return ret;
     }
 
-    public static void setString(final String pkgName, final SpName spName, String key, String value) {
+    public static void setString(final String pkgName, final SharedPrefType sharedPrefType, String key, String value) {
         ContentValues values = new ContentValues();
-        values.put(SpDbHelper.COL_VALUE, value);
+        values.put(SharedPrefDbHelper.COL_VALUE, value);
         ContentResolver contentResolver = mContext.getContentResolver();
         try {
-            int count = contentResolver.update(SharePrefWrapper.getDBSharedPrefUri(pkgName, spName), values,
-                    SpDbHelper.COL_KEY + "=?", new String[]{key});
+            int count = contentResolver.update(SharedPrefWrapper.getDBSharedPrefUri(pkgName, sharedPrefType), values,
+                    SharedPrefDbHelper.COL_KEY + "=?", new String[]{key});
 
             if (count == 0) {
-                values.put(SpDbHelper.COL_KEY, key);
-                contentResolver.insert(SharePrefWrapper.getDBSharedPrefUri(pkgName,spName), values);
+                values.put(SharedPrefDbHelper.COL_KEY, key);
+                contentResolver.insert(SharedPrefWrapper.getDBSharedPrefUri(pkgName, sharedPrefType), values);
             }
         } catch (Exception e) {
             Logger.printStackTrace(e);
@@ -94,13 +81,13 @@ public class SharePrefWrapper {
     }
 
 
-    public static String getString(final String pkgName, final SpName spName, String key, String defVal) {
+    public static String getString(final String pkgName, final SharedPrefType sharedPrefType, String key, String defVal) {
         String value = defVal;
         Cursor cursor = null;
         try {
             cursor = mContext.getContentResolver()
-                    .query(SharePrefWrapper.getDBSharedPrefUri(pkgName, spName), new String[]{SpDbHelper.COL_VALUE},
-                            SpDbHelper.COL_KEY + "=?", new String[]{key}, null);
+                    .query(SharedPrefWrapper.getDBSharedPrefUri(pkgName, sharedPrefType), new String[]{SharedPrefDbHelper.COL_VALUE},
+                            SharedPrefDbHelper.COL_KEY + "=?", new String[]{key}, null);
             if (cursor != null) {
                 if (cursor.moveToFirst()) {
                     value = cursor.getString(0);
@@ -114,30 +101,30 @@ public class SharePrefWrapper {
         return value;
     }
 
-    public static void setBoolean(final String pkgName, final SpName spName, String key, boolean value) {
+    public static void setBoolean(final String pkgName, final SharedPrefType sharedPrefType, String key, boolean value) {
         ContentValues values = new ContentValues();
-        values.put(SpDbHelper.COL_VALUE, value ? 1 : 0);
+        values.put(SharedPrefDbHelper.COL_VALUE, value ? 1 : 0);
         ContentResolver contentResolver = mContext.getContentResolver();
         try {
-            int count = contentResolver.update(SharePrefWrapper.getDBSharedPrefUri(pkgName, spName), values,
-                    SpDbHelper.COL_KEY + "=?", new String[]{key});
+            int count = contentResolver.update(SharedPrefWrapper.getDBSharedPrefUri(pkgName, sharedPrefType), values,
+                    SharedPrefDbHelper.COL_KEY + "=?", new String[]{key});
 
             if (count == 0) {
-                values.put(SpDbHelper.COL_KEY, key);
-                contentResolver.insert(SharePrefWrapper.getDBSharedPrefUri(pkgName,spName), values);
+                values.put(SharedPrefDbHelper.COL_KEY, key);
+                contentResolver.insert(SharedPrefWrapper.getDBSharedPrefUri(pkgName, sharedPrefType), values);
             }
         } catch (Exception e) {
             Logger.printStackTrace(e);
         }
     }
 
-    public static boolean getBoolean(final String pkgName, final SpName spName, String key, boolean defVal) {
+    public static boolean getBoolean(final String pkgName, final SharedPrefType sharedPrefType, String key, boolean defVal) {
         boolean value = defVal;
         Cursor cursor = null;
         try {
             cursor = mContext.getContentResolver()
-                    .query(SharePrefWrapper.getDBSharedPrefUri(pkgName, spName), new String[]{SpDbHelper.COL_VALUE},
-                            SpDbHelper.COL_KEY + "=?", new String[]{key}, null);
+                    .query(SharedPrefWrapper.getDBSharedPrefUri(pkgName, sharedPrefType), new String[]{SharedPrefDbHelper.COL_VALUE},
+                            SharedPrefDbHelper.COL_KEY + "=?", new String[]{key}, null);
             if (cursor != null) {
                 if (cursor.moveToFirst()) {
                     try {
@@ -157,30 +144,30 @@ public class SharePrefWrapper {
         return value;
     }
 
-    public static void setInt(final String pkgName, final SpName spName, String key, int value) {
+    public static void setInt(final String pkgName, final SharedPrefType sharedPrefType, String key, int value) {
         ContentValues values = new ContentValues();
-        values.put(SpDbHelper.COL_VALUE, value);
+        values.put(SharedPrefDbHelper.COL_VALUE, value);
         ContentResolver contentResolver = mContext.getContentResolver();
         try {
-            int count = contentResolver.update(SharePrefWrapper.getDBSharedPrefUri(pkgName, spName), values,
-                    SpDbHelper.COL_KEY + "=?", new String[]{key});
+            int count = contentResolver.update(SharedPrefWrapper.getDBSharedPrefUri(pkgName, sharedPrefType), values,
+                    SharedPrefDbHelper.COL_KEY + "=?", new String[]{key});
 
             if (count == 0) {
-                values.put(SpDbHelper.COL_KEY, key);
-                contentResolver.insert(SharePrefWrapper.getDBSharedPrefUri(pkgName,spName), values);
+                values.put(SharedPrefDbHelper.COL_KEY, key);
+                contentResolver.insert(SharedPrefWrapper.getDBSharedPrefUri(pkgName, sharedPrefType), values);
             }
         } catch (Exception e) {
             Logger.printStackTrace(e);
         }
     }
 
-    public static int getInt(final String pkgName, final SpName spName, String key, int defVal) {
+    public static int getInt(final String pkgName, final SharedPrefType sharedPrefType, String key, int defVal) {
         int value = defVal;
         Cursor cursor = null;
         try {
             cursor = mContext.getContentResolver()
-                    .query(SharePrefWrapper.getDBSharedPrefUri(pkgName, spName), new String[]{SpDbHelper.COL_VALUE},
-                            SpDbHelper.COL_KEY + "=?", new String[]{key}, null);
+                    .query(SharedPrefWrapper.getDBSharedPrefUri(pkgName, sharedPrefType), new String[]{SharedPrefDbHelper.COL_VALUE},
+                            SharedPrefDbHelper.COL_KEY + "=?", new String[]{key}, null);
             if (cursor != null) {
                 if (cursor.moveToFirst()) {
                     try {
@@ -200,30 +187,30 @@ public class SharePrefWrapper {
         return value;
     }
 
-    public static void setLong(final String pkgName, final SpName spName, String key, long value) {
+    public static void setLong(final String pkgName, final SharedPrefType sharedPrefType, String key, long value) {
         ContentValues values = new ContentValues();
-        values.put(SpDbHelper.COL_VALUE, value);
+        values.put(SharedPrefDbHelper.COL_VALUE, value);
         ContentResolver contentResolver = mContext.getContentResolver();
 
         try {
-            int count = contentResolver.update(SharePrefWrapper.getDBSharedPrefUri(pkgName, spName), values,
-                    SpDbHelper.COL_KEY + "=?", new String[]{key});
+            int count = contentResolver.update(SharedPrefWrapper.getDBSharedPrefUri(pkgName, sharedPrefType), values,
+                    SharedPrefDbHelper.COL_KEY + "=?", new String[]{key});
             if (count == 0) {
-                values.put(SpDbHelper.COL_KEY, key);
-                contentResolver.insert(SharePrefWrapper.getDBSharedPrefUri(pkgName,spName), values);
+                values.put(SharedPrefDbHelper.COL_KEY, key);
+                contentResolver.insert(SharedPrefWrapper.getDBSharedPrefUri(pkgName, sharedPrefType), values);
             }
         } catch (Exception e) {
             Logger.printStackTrace(e);
         }
     }
 
-    public static long getLong(final String pkgName, final SpName spName, String key, long defVal) {
+    public static long getLong(final String pkgName, final SharedPrefType sharedPrefType, String key, long defVal) {
         long value = defVal;
         Cursor cursor = null;
         try {
             cursor = mContext.getContentResolver()
-                    .query(SharePrefWrapper.getDBSharedPrefUri(pkgName, spName), new String[]{SpDbHelper.COL_VALUE},
-                            SpDbHelper.COL_KEY + "=?", new String[]{key}, null);
+                    .query(SharedPrefWrapper.getDBSharedPrefUri(pkgName, sharedPrefType), new String[]{SharedPrefDbHelper.COL_VALUE},
+                            SharedPrefDbHelper.COL_KEY + "=?", new String[]{key}, null);
             if (cursor != null) {
                 if (cursor.moveToFirst()) {
                     try {
@@ -243,30 +230,30 @@ public class SharePrefWrapper {
         return value;
     }
 
-    public static void setFloat(final String pkgName, final SpName spName, String key, float value) {
+    public static void setFloat(final String pkgName, final SharedPrefType sharedPrefType, String key, float value) {
         ContentValues values = new ContentValues();
-        values.put(SpDbHelper.COL_VALUE, value);
+        values.put(SharedPrefDbHelper.COL_VALUE, value);
 
         ContentResolver contentResolver = mContext.getContentResolver();
         try {
-            int count = contentResolver.update(SharePrefWrapper.getDBSharedPrefUri(pkgName, spName), values,
-                    SpDbHelper.COL_KEY + "=?", new String[]{key});
+            int count = contentResolver.update(SharedPrefWrapper.getDBSharedPrefUri(pkgName, sharedPrefType), values,
+                    SharedPrefDbHelper.COL_KEY + "=?", new String[]{key});
             if (count == 0) {
-                values.put(SpDbHelper.COL_KEY, key);
-                contentResolver.insert(SharePrefWrapper.getDBSharedPrefUri(pkgName,spName), values);
+                values.put(SharedPrefDbHelper.COL_KEY, key);
+                contentResolver.insert(SharedPrefWrapper.getDBSharedPrefUri(pkgName, sharedPrefType), values);
             }
         } catch (Exception e) {
             Logger.printStackTrace(e);
         }
     }
 
-    public static float getFloat(final String pkgName, final SpName spName, String key, float defVal) {
+    public static float getFloat(final String pkgName, final SharedPrefType sharedPrefType, String key, float defVal) {
         float value = defVal;
         Cursor cursor = null;
         try {
             cursor = mContext.getContentResolver()
-                    .query(SharePrefWrapper.getDBSharedPrefUri(pkgName, spName), new String[]{SpDbHelper.COL_VALUE},
-                            SpDbHelper.COL_KEY + "=?", new String[]{key}, null);
+                    .query(SharedPrefWrapper.getDBSharedPrefUri(pkgName, sharedPrefType), new String[]{SharedPrefDbHelper.COL_VALUE},
+                            SharedPrefDbHelper.COL_KEY + "=?", new String[]{key}, null);
             if (cursor != null) {
                 if (cursor.moveToFirst()) {
                     try {
@@ -286,9 +273,9 @@ public class SharePrefWrapper {
         return value;
     }
 
-    public static void clearAll(final String pkgName,final SpName spName) {
+    public static void clearAll(final String pkgName, final SharedPrefType sharedPrefType) {
         mContext.getContentResolver()
-                .delete(SharePrefWrapper.getDBSharedPrefUri(pkgName,spName), null, null);
+                .delete(SharedPrefWrapper.getDBSharedPrefUri(pkgName, sharedPrefType), null, null);
     }
 }
 
