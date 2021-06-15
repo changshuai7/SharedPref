@@ -16,6 +16,7 @@ public class SharePrefWrapper {
     //SP类型
     public enum SpName{
         DEFAULT(SharedPreferenceProvider.URI_PATH_SP_DEFAULT),
+        // 这里额外申明了另一张表，以备以后需要。
         OTHER(SharedPreferenceProvider.URI_PATH_SP_OTHER);
 
         private final String uriPath;
@@ -54,10 +55,8 @@ public class SharePrefWrapper {
                     new String[]{key});
         } catch (Exception e) {
             Logger.printStackTrace(e);
-
         }
     }
-
 
     public static boolean contains(final String pkgName, final SpName spName, String key) {
         Cursor cursor = null;
@@ -142,7 +141,7 @@ public class SharePrefWrapper {
             if (cursor != null) {
                 if (cursor.moveToFirst()) {
                     try {
-                        value = Integer.valueOf(cursor.getString(0)).intValue() == 1 ? true : false;
+                        value = Integer.parseInt(cursor.getString(0)) == 1;
                     } catch (Exception e) {
                         Logger.printStackTrace(e);
                     }
@@ -185,7 +184,7 @@ public class SharePrefWrapper {
             if (cursor != null) {
                 if (cursor.moveToFirst()) {
                     try {
-                        value = Integer.valueOf(cursor.getString(0)).intValue();
+                        value = Integer.parseInt(cursor.getString(0));
                     } catch (Exception e) {
                         Logger.printStackTrace(e);
                     }
@@ -228,18 +227,8 @@ public class SharePrefWrapper {
             if (cursor != null) {
                 if (cursor.moveToFirst()) {
                     try {
-                        value = Long.valueOf(cursor.getString(0)).longValue();
+                        value = Long.parseLong(cursor.getString(0));
                     } catch (Exception e) {
-                        /**
-                         * 根据崩溃日志,对数据类型装换进行保护
-                         * Caused by: java.lang.NumberFormatException: Invalid long: "13876880w7665"
-                         * at java.lang.Long.invalidLong(Long.java:125)
-                         * at java.lang.Long.parse(Long.java:362)
-                         * at java.lang.Long.parseLong(Long.java:353)
-                         * at java.lang.Long.parseLong(Long.java:319)
-                         * at java.lang.Long.valueOf(Long.java:477)
-                         * at com.qihoo360.mobilesafe.share.SharedPref.long
-                         */
                         Logger.printStackTrace(e);
                     }
                 }
@@ -281,7 +270,7 @@ public class SharePrefWrapper {
             if (cursor != null) {
                 if (cursor.moveToFirst()) {
                     try {
-                        value = Float.valueOf(cursor.getString(0)).floatValue();
+                        value = Float.parseFloat(cursor.getString(0));
                     } catch (Exception e) {
                         Logger.printStackTrace(e);
                     }

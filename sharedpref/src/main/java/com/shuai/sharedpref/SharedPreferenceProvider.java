@@ -42,7 +42,7 @@ public class SharedPreferenceProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
+    public synchronized int delete(Uri uri, String selection, String[] selectionArgs) {
         final int code = sURIMatcher.match(uri);
         SpDbHelper dbHelper = SpDbHelper.getInstance(getContext());
 
@@ -65,7 +65,7 @@ public class SharedPreferenceProvider extends ContentProvider {
     }
 
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+    public synchronized Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         final int code = sURIMatcher.match(uri);
         SpDbHelper dbHelper = SpDbHelper.getInstance(getContext());
 
@@ -85,7 +85,7 @@ public class SharedPreferenceProvider extends ContentProvider {
     }
 
     @Override
-    public Uri insert(Uri uri, ContentValues values) {
+    public synchronized Uri insert(Uri uri, ContentValues values) {
         final int code = sURIMatcher.match(uri);
         SpDbHelper dbHelper = SpDbHelper.getInstance(getContext());
 
@@ -108,7 +108,7 @@ public class SharedPreferenceProvider extends ContentProvider {
     }
 
     @Override
-    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+    public synchronized int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         final int code = sURIMatcher.match(uri);
         int count = 0;
         SpDbHelper dbHelper = SpDbHelper.getInstance(getContext());
@@ -136,7 +136,7 @@ public class SharedPreferenceProvider extends ContentProvider {
     }
 
 
-    private void notifyChange(Uri uri, ContentObserver observer) {
+    private synchronized void notifyChange(Uri uri, ContentObserver observer) {
         if (getContext() != null) {
             getContext().getContentResolver().notifyChange(uri, observer);
         }

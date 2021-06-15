@@ -30,6 +30,18 @@ public class SharedPref {
     }
 
 
+    /// 清除所有数据
+    public static void clearAll(String pkgName) {
+        if (verify(mContext, pkgName)) {
+            SharePrefWrapper.clearAll(pkgName, SharePrefWrapper.SpName.DEFAULT);
+        }
+    }
+
+    public static void clearAll() {
+        removeKey(mContext.getPackageName());
+    }
+
+
     /// 删除
     public static void removeKey(String pkgName, String key) {
         if (verify(mContext, pkgName)) {
@@ -131,9 +143,9 @@ public class SharedPref {
         setLong(mContext.getPackageName(), key, value);
     }
 
-    public static void setLong(String pkgName, String key, long defValue) {
+    public static void setLong(String pkgName, String key, long value) {
         if (verify(mContext, pkgName)) {
-            SharePrefWrapper.setLong(pkgName, SharePrefWrapper.SpName.DEFAULT, key, defValue);
+            SharePrefWrapper.setLong(pkgName, SharePrefWrapper.SpName.DEFAULT, key, value);
         }
     }
 
