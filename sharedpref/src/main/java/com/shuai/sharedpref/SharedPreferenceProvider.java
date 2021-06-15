@@ -18,14 +18,13 @@ public class SharedPreferenceProvider extends ContentProvider {
     private static final int URI_MATCH_CODE_SP_DEFAULT = 1;
     private static final int URI_MATCH_CODE_SP_OTHER = 2;
 
-    public static final int VISIT_TYPE_LOCAL = 0;//从本应用访问
-    public static final int VISIT_TYPE_EXTERNAL = 1;//从外部应用访问
-
     private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
+    public static final String ParameterKeyCallingPkgName = "callingPkgName";//参数Key：调用方的包名
+
     private static void initURIMatcher(Context context) {
-        sURIMatcher.addURI(getAuthority(context), SharedPrefType.DEFAULT.uriPath + "/#", URI_MATCH_CODE_SP_DEFAULT);
-        sURIMatcher.addURI(getAuthority(context), SharedPrefType.OTHER.uriPath + "/#", URI_MATCH_CODE_SP_OTHER);
+        sURIMatcher.addURI(getAuthority(context), SharedPrefType.DEFAULT.uriPath, URI_MATCH_CODE_SP_DEFAULT);
+        sURIMatcher.addURI(getAuthority(context), SharedPrefType.OTHER.uriPath, URI_MATCH_CODE_SP_OTHER);
     }
 
     public static String getAuthority(Context context) {
@@ -172,12 +171,24 @@ public class SharedPreferenceProvider extends ContentProvider {
 
     // 是否允许访问。
     private boolean permissionAllow(Uri uri) {
-        //如果是外部应用访问，并且配置拒绝外部访问。那么返回false
-        if (ContentUris.parseId(uri) == VISIT_TYPE_EXTERNAL && !SharedPref.isAllowExternalVisit()) {
-            Logger.e("权限拒绝");
-            return false;
-        }
-        return true;
-    }
 
+        // 从ContentProvider中获取调用者的PackageName的方法为：getCallingPackage();但是此API要求miniSDK为19以上。不够通用。
+
+        if (uri != null && getContext() != null) {
+            //当前应用包名
+            String curPkgName = getContext().getPackageName();
+            //调用者应用包名
+            String callPkgName = uri.getQueryParameter(ParameterKeyCallingPkgName);
+
+            if (curPkgName.equals(callPkgName)) {
+                //当前应用，可直接访问
+                return true;
+            } else {
+                //外部应用，需要看配置是否允许访问
+                return SharedPref.isAllowExternalVisit();
+            }
+        }
+        return false;
+
+    }
 }

@@ -9,8 +9,7 @@ import android.net.Uri;
 import com.shuai.sharedpref.utils.Logger;
 import com.shuai.sharedpref.utils.Util;
 
-import static com.shuai.sharedpref.SharedPreferenceProvider.VISIT_TYPE_EXTERNAL;
-import static com.shuai.sharedpref.SharedPreferenceProvider.VISIT_TYPE_LOCAL;
+import static com.shuai.sharedpref.SharedPreferenceProvider.ParameterKeyCallingPkgName;
 
 
 public class SharedPrefWrapper {
@@ -29,19 +28,22 @@ public class SharedPrefWrapper {
     /**
      * 获取URI
      *
-     * @param pkgName        应用包名
+     * @param pkgName        要被访问的 应用包名
      * @param sharedPrefType 表类型
      * @return
      */
     public static Uri getDBSharedPrefUri(final String pkgName, final SharedPrefType sharedPrefType) {
 
-        // 形如=》 content://com.baidu.com.provider.sharedpref/default/0
+        // 形如=》 content://com.baidu.com.provider.sharedpref/default?callingPkgName=com.baidu.com
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("content")
+                .authority(pkgName + AuthoritySuffix)
+                .appendPath(sharedPrefType != null ? sharedPrefType.uriPath : SharedPrefType.DEFAULT.uriPath)
+                .appendQueryParameter(ParameterKeyCallingPkgName, mContext.getPackageName());// 访问者的应用包名
+        Uri uri = builder.build();
+        Logger.d("getDBSharedPrefUri => Uri = " + uri.toString());
+        return uri;
 
-        return Uri.parse("content://"
-                + pkgName + AuthoritySuffix
-                + "/" + (sharedPrefType == null ? SharedPrefType.DEFAULT.uriPath : sharedPrefType.uriPath)
-                + "/" + (pkgName.equals(mContext.getPackageName()) ? VISIT_TYPE_LOCAL : VISIT_TYPE_EXTERNAL) // VISIT_TYPE_LOCAL：0代表同一个应用。VISIT_TYPE_EXTERNAL：1代表外部应用访问
-        );
     }
 
 
