@@ -46,7 +46,7 @@ public class SharedPref {
     }
 
     public static void clearAll() {
-        removeKey(mContext.getPackageName());
+        clearAll(mContext.getPackageName());
     }
 
 
