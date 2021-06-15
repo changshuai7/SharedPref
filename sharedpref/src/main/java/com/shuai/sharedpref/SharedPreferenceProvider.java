@@ -1,6 +1,7 @@
 package com.shuai.sharedpref;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
@@ -8,6 +9,7 @@ import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 
+import com.shuai.sharedpref.utils.Logger;
 import com.shuai.sharedpref.utils.Util;
 
 
@@ -16,11 +18,14 @@ public class SharedPreferenceProvider extends ContentProvider {
     private static final int URI_MATCH_CODE_SP_DEFAULT = 1;
     private static final int URI_MATCH_CODE_SP_OTHER = 2;
 
+    public static final int VISIT_TYPE_LOCAL = 0;//从本应用访问
+    public static final int VISIT_TYPE_EXTERNAL = 1;//从外部应用访问
+
     private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     private static void initURIMatcher(Context context) {
-        sURIMatcher.addURI(getAuthority(context), SharedPrefType.DEFAULT.uriPath, URI_MATCH_CODE_SP_DEFAULT);
-        sURIMatcher.addURI(getAuthority(context), SharedPrefType.OTHER.uriPath, URI_MATCH_CODE_SP_OTHER);
+        sURIMatcher.addURI(getAuthority(context), SharedPrefType.DEFAULT.uriPath + "/#", URI_MATCH_CODE_SP_DEFAULT);
+        sURIMatcher.addURI(getAuthority(context), SharedPrefType.OTHER.uriPath + "/#", URI_MATCH_CODE_SP_OTHER);
     }
 
     public static String getAuthority(Context context) {
@@ -39,8 +44,14 @@ public class SharedPreferenceProvider extends ContentProvider {
         return null;
     }
 
+
     @Override
     public synchronized int delete(Uri uri, String selection, String[] selectionArgs) {
+
+        if (!permissionAllow(uri)) {
+            return 0;
+        }
+
         final int code = sURIMatcher.match(uri);
         SharedPrefDbHelper dbHelper = SharedPrefDbHelper.getInstance(getContext());
 
@@ -65,6 +76,11 @@ public class SharedPreferenceProvider extends ContentProvider {
 
     @Override
     public synchronized Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+
+        if (!permissionAllow(uri)) {
+            return null;
+        }
+
         final int code = sURIMatcher.match(uri);
         SharedPrefDbHelper dbHelper = SharedPrefDbHelper.getInstance(getContext());
 
@@ -85,6 +101,11 @@ public class SharedPreferenceProvider extends ContentProvider {
 
     @Override
     public synchronized Uri insert(Uri uri, ContentValues values) {
+
+        if (!permissionAllow(uri)) {
+            return null;
+        }
+
         final int code = sURIMatcher.match(uri);
         SharedPrefDbHelper dbHelper = SharedPrefDbHelper.getInstance(getContext());
 
@@ -108,6 +129,11 @@ public class SharedPreferenceProvider extends ContentProvider {
 
     @Override
     public synchronized int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+
+        if (!permissionAllow(uri)) {
+            return 0;
+        }
+
         final int code = sURIMatcher.match(uri);
         int count = 0;
         SharedPrefDbHelper dbHelper = SharedPrefDbHelper.getInstance(getContext());
@@ -137,10 +163,21 @@ public class SharedPreferenceProvider extends ContentProvider {
         return count;
     }
 
+    // 变更通知。
     private synchronized void notifyChange(Uri uri, ContentObserver observer) {
         if (getContext() != null) {
             getContext().getContentResolver().notifyChange(uri, observer);
         }
+    }
+
+    // 是否允许访问。
+    private boolean permissionAllow(Uri uri) {
+        //如果是外部应用访问，并且配置拒绝外部访问。那么返回false
+        if (ContentUris.parseId(uri) == VISIT_TYPE_EXTERNAL && !SharedPref.isAllowExternalVisit()) {
+            Logger.e("权限拒绝");
+            return false;
+        }
+        return true;
     }
 
 }

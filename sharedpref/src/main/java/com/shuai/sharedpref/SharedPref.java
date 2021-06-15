@@ -12,6 +12,14 @@ public class SharedPref {
     private static Context mContext;
     private static boolean mAllowExternalVisit = false;//是否允许外部访问
 
+    public static boolean isAllowExternalVisit() {
+        return mAllowExternalVisit;
+    }
+
+    public static Context getContext() {
+        return mContext;
+    }
+
     /**
      * 请在Application中完成初始化操作
      *
@@ -33,9 +41,7 @@ public class SharedPref {
     /// 清除所有数据
 
     public static void clearAll(String pkgName) {
-        if (verify(mContext, pkgName)) {
-            SharedPrefWrapper.clearAll(pkgName, SharedPrefType.DEFAULT);
-        }
+        SharedPrefWrapper.clearAll(pkgName, SharedPrefType.DEFAULT);
     }
 
     public static void clearAll() {
@@ -46,9 +52,7 @@ public class SharedPref {
     /// 删除
 
     public static void removeKey(String pkgName, String key) {
-        if (verify(mContext, pkgName)) {
-            SharedPrefWrapper.removeKey(pkgName, SharedPrefType.DEFAULT, key);
-        }
+        SharedPrefWrapper.removeKey(pkgName, SharedPrefType.DEFAULT, key);
     }
 
     public static void removeKey(String key) {
@@ -58,10 +62,7 @@ public class SharedPref {
     /// 包含
 
     public static boolean contains(String pkgName, String key) {
-        if (verify(mContext, pkgName)) {
-            return SharedPrefWrapper.contains(pkgName, SharedPrefType.DEFAULT, key);
-        }
-        return false;
+        return SharedPrefWrapper.contains(pkgName, SharedPrefType.DEFAULT, key);
     }
 
     public static boolean contains(String key) {
@@ -75,9 +76,7 @@ public class SharedPref {
     }
 
     public static void setString(String pkgName, String key, String value) {
-        if (verify(mContext, pkgName)) {
-            SharedPrefWrapper.setString(pkgName, SharedPrefType.DEFAULT, key, value);
-        }
+        SharedPrefWrapper.setString(pkgName, SharedPrefType.DEFAULT, key, value);
     }
 
     public static String getString(String key, String defValue) {
@@ -85,10 +84,7 @@ public class SharedPref {
     }
 
     public static String getString(String pkgName, String key, String defValue) {
-        if (verify(mContext, pkgName)) {
-            return SharedPrefWrapper.getString(pkgName, SharedPrefType.DEFAULT, key, defValue);
-        }
-        return defValue;
+        return SharedPrefWrapper.getString(pkgName, SharedPrefType.DEFAULT, key, defValue);
     }
 
 
@@ -99,9 +95,7 @@ public class SharedPref {
     }
 
     public static void setBoolean(String pkgName, String key, boolean value) {
-        if (verify(mContext, pkgName)) {
-            SharedPrefWrapper.setBoolean(pkgName, SharedPrefType.DEFAULT, key, value);
-        }
+        SharedPrefWrapper.setBoolean(pkgName, SharedPrefType.DEFAULT, key, value);
     }
 
     public static boolean getBoolean(String key, boolean defValue) {
@@ -109,10 +103,7 @@ public class SharedPref {
     }
 
     public static boolean getBoolean(String pkgName, String key, boolean defValue) {
-        if (verify(mContext, pkgName)) {
-            return SharedPrefWrapper.getBoolean(pkgName, SharedPrefType.DEFAULT, key, defValue);
-        }
-        return defValue;
+        return SharedPrefWrapper.getBoolean(pkgName, SharedPrefType.DEFAULT, key, defValue);
     }
 
     /// Int
@@ -122,9 +113,7 @@ public class SharedPref {
     }
 
     public static void setInt(String pkgName, String key, int value) {
-        if (verify(mContext, pkgName)) {
-            SharedPrefWrapper.setInt(pkgName, SharedPrefType.DEFAULT, key, value);
-        }
+        SharedPrefWrapper.setInt(pkgName, SharedPrefType.DEFAULT, key, value);
     }
 
     public static int getInt(String key, int defValue) {
@@ -132,10 +121,7 @@ public class SharedPref {
     }
 
     public static int getInt(String pkgName, String key, int defValue) {
-        if (verify(mContext, pkgName)) {
-            return SharedPrefWrapper.getInt(pkgName, SharedPrefType.DEFAULT, key, defValue);
-        }
-        return defValue;
+        return SharedPrefWrapper.getInt(pkgName, SharedPrefType.DEFAULT, key, defValue);
     }
 
     /// Long
@@ -145,9 +131,7 @@ public class SharedPref {
     }
 
     public static void setLong(String pkgName, String key, long value) {
-        if (verify(mContext, pkgName)) {
-            SharedPrefWrapper.setLong(pkgName, SharedPrefType.DEFAULT, key, value);
-        }
+        SharedPrefWrapper.setLong(pkgName, SharedPrefType.DEFAULT, key, value);
     }
 
     public static long getLong(String key, long defValue) {
@@ -155,10 +139,7 @@ public class SharedPref {
     }
 
     public static long getLong(String pkgName, String key, long defValue) {
-        if (verify(mContext, pkgName)) {
-            return SharedPrefWrapper.getLong(pkgName, SharedPrefType.DEFAULT, key, defValue);
-        }
-        return defValue;
+        return SharedPrefWrapper.getLong(pkgName, SharedPrefType.DEFAULT, key, defValue);
     }
 
     /// Float
@@ -168,9 +149,7 @@ public class SharedPref {
     }
 
     public static void setFloat(String pkgName, String key, float value) {
-        if (verify(mContext, pkgName)) {
-            SharedPrefWrapper.setFloat(pkgName, SharedPrefType.DEFAULT, key, value);
-        }
+        SharedPrefWrapper.setFloat(pkgName, SharedPrefType.DEFAULT, key, value);
     }
 
     public static float getFloat(String key, float defValue) {
@@ -178,15 +157,7 @@ public class SharedPref {
     }
 
     public static float getFloat(String pkgName, String key, float defValue) {
-        if (verify(mContext, pkgName)) {
-            return SharedPrefWrapper.getFloat(pkgName, SharedPrefType.DEFAULT, key, defValue);
-        }
-        return defValue;
+        return SharedPrefWrapper.getFloat(pkgName, SharedPrefType.DEFAULT, key, defValue);
     }
 
-
-    private static boolean verify(Context context, String pkgName) {
-        if (context.getPackageName().equals(pkgName)) return true;
-        return mAllowExternalVisit;
-    }
 }

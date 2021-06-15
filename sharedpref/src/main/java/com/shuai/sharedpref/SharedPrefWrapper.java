@@ -9,6 +9,9 @@ import android.net.Uri;
 import com.shuai.sharedpref.utils.Logger;
 import com.shuai.sharedpref.utils.Util;
 
+import static com.shuai.sharedpref.SharedPreferenceProvider.VISIT_TYPE_EXTERNAL;
+import static com.shuai.sharedpref.SharedPreferenceProvider.VISIT_TYPE_LOCAL;
+
 
 public class SharedPrefWrapper {
 
@@ -31,7 +34,14 @@ public class SharedPrefWrapper {
      * @return
      */
     public static Uri getDBSharedPrefUri(final String pkgName, final SharedPrefType sharedPrefType) {
-        return Uri.parse("content://" + pkgName + AuthoritySuffix + "/" + (sharedPrefType == null ? SharedPrefType.DEFAULT.uriPath : sharedPrefType.uriPath));
+
+        // 形如=》 content://com.baidu.com.provider.sharedpref/default/0
+
+        return Uri.parse("content://"
+                + pkgName + AuthoritySuffix
+                + "/" + (sharedPrefType == null ? SharedPrefType.DEFAULT.uriPath : sharedPrefType.uriPath)
+                + "/" + (pkgName.equals(mContext.getPackageName()) ? VISIT_TYPE_LOCAL : VISIT_TYPE_EXTERNAL) // VISIT_TYPE_LOCAL：0代表同一个应用。VISIT_TYPE_EXTERNAL：1代表外部应用访问
+        );
     }
 
 
