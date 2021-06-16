@@ -285,6 +285,52 @@ public class SharedPrefWrapper {
         return value;
     }
 
+
+    public static void setDouble(final String pkgName, final SharedPrefType sharedPrefType, String key, double value) {
+        ContentValues values = new ContentValues();
+        values.put(SharedPrefDbHelper.COL_VALUE, value);
+
+        ContentResolver contentResolver = mContext.getContentResolver();
+        try {
+            int count = contentResolver.update(SharedPrefWrapper.getDBSharedPrefUri(pkgName, sharedPrefType), values,
+                    SharedPrefDbHelper.COL_KEY + "=?", new String[]{key});
+            if (count == 0) {
+                values.put(SharedPrefDbHelper.COL_KEY, key);
+                contentResolver.insert(SharedPrefWrapper.getDBSharedPrefUri(pkgName, sharedPrefType), values);
+            }
+        } catch (Exception e) {
+            Logger.printStackTrace(e);
+        }
+    }
+
+    public static double getDouble(final String pkgName, final SharedPrefType sharedPrefType, String key, double defVal) {
+        double value = defVal;
+        Cursor cursor = null;
+        try {
+            cursor = mContext.getContentResolver()
+                    .query(SharedPrefWrapper.getDBSharedPrefUri(pkgName, sharedPrefType), new String[]{SharedPrefDbHelper.COL_VALUE},
+                            SharedPrefDbHelper.COL_KEY + "=?", new String[]{key}, null);
+            if (cursor != null) {
+                if (cursor.moveToFirst()) {
+                    try {
+                        value = Double.parseDouble(cursor.getString(0));
+                    } catch (Exception e) {
+                        Logger.printStackTrace(e);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Logger.printStackTrace(e);
+        } catch (Error e) {
+            Logger.printStackTrace(e);
+        } finally {
+            Util.closeCursor(cursor);
+        }
+        return value;
+    }
+
+
+
     public static void clearAll(final String pkgName, final SharedPrefType sharedPrefType) {
         mContext.getContentResolver()
                 .delete(SharedPrefWrapper.getDBSharedPrefUri(pkgName, sharedPrefType), null, null);
