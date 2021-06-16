@@ -19,9 +19,22 @@ SharedPref 的底层是使用了ContentProvider。有如下优点：
 
 ### 1.引入。
 
+Step 1.Add it in your root build.gradle at the end of repositories:
+
+```
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://www.jitpack.io' }
+    }
+}
+```
+
+Step 2. Add the dependency
+
 ```
 dependencies {
-        implementation 'com.shuai:sharedpref:0.0.3'
+     implementation 'com.github.changshuai7:SharedPref:Tag'
 }
 
 版本号 一般采用Tag中最新的版本。
