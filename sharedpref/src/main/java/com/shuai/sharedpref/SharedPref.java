@@ -161,4 +161,22 @@ public class SharedPref {
         return SharedPrefWrapper.getFloat(pkgName, SharedPrefType.DEFAULT, key, defValue);
     }
 
+    /// Double
+
+    public static void setDouble(String key, double value) {
+        setDouble(mContext.getPackageName(), key, value);
+    }
+
+    public static void setDouble(String pkgName, String key, double value) {
+        SharedPrefWrapper.setDouble(pkgName, SharedPrefType.DEFAULT, key, value);
+    }
+
+    public static double getDouble(String key, double defValue) {
+        return getDouble(mContext.getPackageName(), key, defValue);
+    }
+
+    public static double getDouble(String pkgName, String key, double defValue) {
+        return SharedPrefWrapper.getDouble(pkgName, SharedPrefType.DEFAULT, key, defValue);
+    }
+
 }
