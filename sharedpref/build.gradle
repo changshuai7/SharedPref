@@ -1,11 +1,8 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
 buildscript {
     repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.novoda:bintray-release:0.9.1'
+        google()
+        mavenCentral()
     }
 }
 android {
@@ -15,7 +12,8 @@ android {
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
     }
 
     buildTypes {
@@ -23,20 +21,9 @@ android {
             consumerProguardFiles 'proguard-rules.pro'
         }
     }
-
 }
 
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-
-}
-
-publish {
-    userOrg = rootProject.ext.userOrg
-    groupId = rootProject.ext.groupId
-    artifactId = rootProject.ext.artifactId
-    publishVersion = rootProject.ext.publishVersion
-    desc = rootProject.ext.desc
-    website = rootProject.ext.website
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
