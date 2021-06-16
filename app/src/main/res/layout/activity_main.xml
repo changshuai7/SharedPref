@@ -32,6 +32,12 @@
         android:layout_height="wrap_content"
         android:text="检查SP数据是否存在" />
 
+    <Button
+        android:id="@+id/btn_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="测试按钮" />
+
 
 
 </LinearLayout>

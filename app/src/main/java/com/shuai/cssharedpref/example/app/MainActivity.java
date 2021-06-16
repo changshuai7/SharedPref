@@ -50,5 +50,14 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, SharedPref.contains(KEY)+"", Toast.LENGTH_SHORT).show();
             }
         });
+
+        // 功能测试
+        findViewById(R.id.btn_test).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPref.setString("com.shuai.cssharedpref.example.app",KEY,"我是来自其他应用的数据");
+//                SharedPref.removeKey("com.renrenche.salesorder",KEY);
+            }
+        });
     }
 }
