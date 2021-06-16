@@ -47,8 +47,7 @@ dependencies {
     /*************Base-Lib*************/
     implementation "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
 
-    implementation project(':sharedpref')
-
-//    implementation 'com.shuai:sharedpref:0.0.3'
+    //implementation project(':sharedpref')
+    implementation 'com.github.changshuai7:SharedPref:1.0.1'
 
 }
