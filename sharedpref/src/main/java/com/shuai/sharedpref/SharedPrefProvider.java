@@ -1,7 +1,6 @@
 package com.shuai.sharedpref;
 
 import android.content.ContentProvider;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
@@ -9,11 +8,10 @@ import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 
-import com.shuai.sharedpref.utils.Logger;
 import com.shuai.sharedpref.utils.Util;
 
 
-public class SharedPreferenceProvider extends ContentProvider {
+public class SharedPrefProvider extends ContentProvider {
 
     private static final int URI_MATCH_CODE_SP_DEFAULT = 1;
     private static final int URI_MATCH_CODE_SP_OTHER = 2;
@@ -28,7 +26,7 @@ public class SharedPreferenceProvider extends ContentProvider {
     }
 
     public static String getAuthority(Context context) {
-        return Util.getProviderAuthority(context, SharedPreferenceProvider.class.getName());
+        return Util.getProviderAuthority(context, SharedPrefProvider.class.getName());
     }
 
     @Override

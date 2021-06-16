@@ -9,7 +9,7 @@ import android.net.Uri;
 import com.shuai.sharedpref.utils.Logger;
 import com.shuai.sharedpref.utils.Util;
 
-import static com.shuai.sharedpref.SharedPreferenceProvider.ParameterKeyCallingPkgName;
+import static com.shuai.sharedpref.SharedPrefProvider.ParameterKeyCallingPkgName;
 
 
 public class SharedPrefWrapper {
@@ -20,7 +20,7 @@ public class SharedPrefWrapper {
 
     public static void initContext(Context context) {
         mContext = context;
-        mAuthority = Util.getProviderAuthority(context, SharedPreferenceProvider.class.getName());
+        mAuthority = Util.getProviderAuthority(context, SharedPrefProvider.class.getName());
     }
 
     final static String AuthoritySuffix = ".provider.sharedpref";
