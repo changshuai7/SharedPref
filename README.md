@@ -52,10 +52,9 @@ public void onCreate() {
      * 请在Application中完成初始化操作
      *
      * @param context             上下文
-     * @param debug               是否是debug模式
      * @param allowExternalVisit  是否允许外部应用程序访问数据
      */
-    SharedPref.init(this,BuildConfig.DEBUG,true);
+    SharedPref.init(this,true);
 }
 ```
 
