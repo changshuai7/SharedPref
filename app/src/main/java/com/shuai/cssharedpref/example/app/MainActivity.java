@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_test).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPref.setString("com.shuai.cssharedpref.example.app",KEY,"我是来自其他应用的数据");
+                SharedPref.setString(KEY,"我是来自其他应用的数据","com.shuai.cssharedpref.example.app");
 //                SharedPref.removeKey("com.renrenche.salesorder",KEY);
             }
         });
