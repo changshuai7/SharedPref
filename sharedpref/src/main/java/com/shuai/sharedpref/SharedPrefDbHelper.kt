@@ -55,7 +55,7 @@ internal class SharedPrefDbHelper private constructor(private val mContext: Cont
         const val COL_KEY = "K"
         const val COL_VALUE = "V"
         val instance: SharedPrefDbHelper by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
-            SharedPrefDbHelper(SharedPref.app.applicationContext)
+            SharedPrefDbHelper(SharedPref.context.applicationContext)
         }
     }
 
