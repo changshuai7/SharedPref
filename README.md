@@ -84,9 +84,9 @@ SharedPref.removeKey("test");
 SharedPref.clearAll();
 ```
 
-如果需要跨应用访问，则所有API第一个参数加入要访问的包名即可，比如：
+如果需要跨应用访问，则所有API最后一个参数加入要访问的包名即可，比如：
 
 ```
 //存数据
-SharedPref.setString(“com.baidu.com”, "test", "存入数据库");
+SharedPref.setString("test", "存入数据库",“com.baidu.com”);
 ```
