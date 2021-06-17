@@ -1,141 +1,63 @@
-package com.shuai.sharedpref;
+package com.shuai.sharedpref
 
-import android.annotation.SuppressLint;
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+import android.content.ContentValues
+import android.content.Context
+import android.database.Cursor
+import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteOpenHelper
+import com.shuai.sharedpref.utils.Logger
 
-import com.shuai.sharedpref.utils.Logger;
+internal class SharedPrefDbHelper private constructor(private val mContext: Context) : SQLiteOpenHelper(mContext, DB_NAME, null, DB_VERSION) {
 
-
-public class SharedPrefDbHelper extends SQLiteOpenHelper {
-    private static final String TAG = "SharedPrefDbHelper";
-    private static final String DB_NAME = "shared_pref.db";
-    private static final int DB_VERSION = 1;
-
-    public static final String COL_KEY = "K";
-    public static final String COL_VALUE = "V";
-
-    private static SharedPrefDbHelper mInstance;
-    private SQLiteDatabase mDb;
-    private Context mContext;
-
-    public synchronized static SharedPrefDbHelper getInstance(Context context) {
-        if (mInstance == null) {
-            mInstance = new SharedPrefDbHelper(context.getApplicationContext());
-        }
-        return mInstance;
-    }
-
-    private SharedPrefDbHelper(Context context) {
-        super(context, DB_NAME, null, DB_VERSION);
-
-        mContext = context;
-
-        checkAndOpenDb();
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + SharedPrefType.DEFAULT.tableName + " (" + COL_KEY + " TEXT NOT NULL, " + COL_VALUE + " TEXT);");
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + SharedPrefType.OTHER.tableName + " (" + COL_KEY + " TEXT NOT NULL, " + COL_VALUE + " TEXT);");
-
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-        Logger.d(TAG, "onUpgrade, old: " + oldVersion + " new: " + newVersion);
-    }
-
-    @SuppressLint({"NewApi", "Override", "unused"})
-    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-    }
-
-    @Override
-    public void onOpen(SQLiteDatabase db) {
-
-        Logger.d(TAG, "onOpen");
-    }
-
-    private boolean checkAndOpenDb() {
-        if (mDb != null) {
-            return true;
+    private var mDb: SQLiteDatabase? = null
+        get() {
+            try {
+                if (field == null) field = writableDatabase
+            } catch (e: Exception) {
+                Logger.printStackTrace(e)
+                field = null
+            }
+            return field
         }
 
-        try {
-            mDb = getWritableDatabase();
-            return true;
-        } catch (Exception e) {
-            Logger.printStackTrace(e);
-            mDb = null;
-        }
-
-        return false;
+    override fun onCreate(db: SQLiteDatabase) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + SharedPrefType.DEFAULT.tableName + " (" + COL_KEY + " TEXT NOT NULL, " + COL_VALUE + " TEXT);")
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + SharedPrefType.OTHER.tableName + " (" + COL_KEY + " TEXT NOT NULL, " + COL_VALUE + " TEXT);")
     }
 
-    /**
-     * 查询
-     * 注意：用完cursor需要自己关闭
-     *
-     * @return 有效的cursor或者null
-     */
-    Cursor query(SharedPrefType type, String[] projection, String selection, String[] selectionArgs) {
-        if (!checkAndOpenDb()) {
-            return null;
-        }
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
+    override fun onDowngrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
+    override fun onOpen(db: SQLiteDatabase) {}
 
-        return mDb.query(type.tableName, projection, selection, selectionArgs, null, null, null);
+    fun query(type: SharedPrefType, projection: Array<out String>?, selection: String?, selectionArgs: Array<out String>?): Cursor? {
+        // 返回游标
+        return mDb?.query(type.tableName, projection, selection, selectionArgs, null, null, null)
     }
 
-    /**
-     * 插入
-     *
-     * @param type
-     * @param values
-     */
-    void insert(SharedPrefType type, ContentValues values) {
-        if (!checkAndOpenDb()) {
-            return;
-        }
-
-        mDb.insert(type.tableName, null, values);
+    fun insert(type: SharedPrefType, values: ContentValues?): Long {
+        // 返回新插入行的行ID，如果发生错误则为-1
+        return mDb?.insert(type.tableName, null, values) ?: -1
     }
 
-    /**
-     * 更新
-     *
-     * @param type
-     * @param values
-     * @param selection
-     * @param selectionArgs
-     * @return
-     */
-    int update(SharedPrefType type, ContentValues values, String selection, String[] selectionArgs) {
-        if (!checkAndOpenDb()) {
-            return 0;
-        }
-
-        return mDb.update(type.tableName, values, selection, selectionArgs);
+    fun update(type: SharedPrefType, values: ContentValues?, selection: String?, selectionArgs: Array<out String>?): Int {
+        // 返回受影响的行数
+        return mDb?.update(type.tableName, values, selection, selectionArgs) ?: 0
     }
 
-    /**
-     * 删除
-     *
-     * @param type
-     * @param selection
-     * @param selectionArgs
-     * @return
-     */
-    int delete(SharedPrefType type, String selection, String[] selectionArgs) {
-        if (!checkAndOpenDb()) {
-            return 0;
-        }
-
-        return mDb.delete(type.tableName, selection, selectionArgs);
+    fun delete(type: SharedPrefType, selection: String?, selectionArgs: Array<out String>?): Int {
+        // 返回受影响的行数
+        return mDb?.delete(type.tableName, selection, selectionArgs) ?: 0
     }
+
+    companion object {
+        private const val DB_NAME = "shared_pref.db"
+        private const val DB_VERSION = 1
+        const val COL_KEY = "K"
+        const val COL_VALUE = "V"
+        val instance: SharedPrefDbHelper by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+            SharedPrefDbHelper(SharedPref.app.applicationContext)
+        }
+    }
+
 
 }

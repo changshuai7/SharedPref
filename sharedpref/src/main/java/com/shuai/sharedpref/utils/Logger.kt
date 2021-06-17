@@ -1,65 +1,60 @@
-package com.shuai.sharedpref.utils;
+package com.shuai.sharedpref.utils
 
-import android.util.Log;
+import android.util.Log
 
 /**
  * 日志简易管理类
  */
-public class Logger {
-    private static boolean isLogEnable = true;
+internal object Logger {
+    private var isLogEnable = true
+    private var tag = "SharedPref"
 
-    private static String tag = "SharedPref";
-
-    public static void debug(boolean isEnable) {
-        debug(tag, isEnable);
+    fun debug(isEnable: Boolean, logTag: String = tag) {
+        tag = logTag
+        isLogEnable = isEnable
     }
 
-    public static void debug(String logTag, boolean isEnable) {
-        tag = logTag;
-        isLogEnable = isEnable;
+    fun v(msg: String) {
+        v(tag, msg)
     }
 
-    public static void v(String msg) {
-        v(tag, msg);
+    fun v(tag: String, msg: String) {
+        if (isLogEnable) Log.v(tag, msg)
     }
 
-    public static void v(String tag, String msg) {
-        if (isLogEnable) Log.v(tag, msg);
+    fun d(msg: String) {
+        d(tag, msg)
     }
 
-    public static void d(String msg) {
-        d(tag, msg);
+    fun d(tag: String, msg: String) {
+        if (isLogEnable) Log.d(tag, msg)
     }
 
-    public static void d(String tag, String msg) {
-        if (isLogEnable) Log.d(tag, msg);
+    fun i(msg: String) {
+        i(tag, msg)
     }
 
-    public static void i(String msg) {
-        i(tag, msg);
+    fun i(tag: String, msg: String) {
+        if (isLogEnable) Log.i(tag, msg)
     }
 
-    public static void i(String tag, String msg) {
-        if (isLogEnable) Log.i(tag, msg);
+    fun w(msg: String) {
+        w(tag, msg)
     }
 
-    public static void w(String msg) {
-        w(tag, msg);
+    fun w(tag: String, msg: String) {
+        if (isLogEnable) Log.w(tag, msg)
     }
 
-    public static void w(String tag, String msg) {
-        if (isLogEnable) Log.w(tag, msg);
+    fun e(msg: String) {
+        e(tag, msg)
     }
 
-    public static void e(String msg) {
-        e(tag, msg);
+    fun e(tag: String, msg: String) {
+        if (isLogEnable) Log.e(tag, msg)
     }
 
-    public static void e(String tag, String msg) {
-        if (isLogEnable) Log.e(tag, msg);
-    }
-
-    public static void printStackTrace(Throwable t) {
-        if (isLogEnable && t != null) t.printStackTrace();
+    fun printStackTrace(t: Throwable?) {
+        if (isLogEnable && t != null) t.printStackTrace()
     }
 }
